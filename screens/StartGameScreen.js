@@ -1,29 +1,86 @@
-import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import React, { useState } from 'react';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Button, 
+    TouchableWithoutFeedback,
+    Keyboard, // for close the keyboard by click around
+    Alert,
+} from 'react-native';
 
 import Colors from '../constants/colors';
 import Card from '../components/Card';
 import Input from '../components/Input';
 
 const StartGameScreen = props => {
+
+    const [enteredValue, setEnteredValue] = useState('');
+    const [confirmed, setConfirmed] = useState(false);
+    const [selectedNumber,setSelectedNumber] = useState();
+
+    const numberInputHandler = inputText => {
+        // validate by only add numbers. otherwise empty 
+        setEnteredValue(inputText.replace(/[^0-9]/g, ''));
+    }
+
+    const resetInputHandler = () => {
+        setEnteredValue('');
+        setConfirmed(false);
+    }
+
+    const confirmInputHandler = () => {
+        const chosenNumber = parseInt(enteredValue);
+        if(isNaN(chosenNumber) || chosenNumber <=0 || chosenNumber > 99){
+            Alert.alert('Invalid Number!', 'Number has to be between 1 and 99',[{text:'Okey', style: 'destructive', onPress: resetInputHandler}])
+            return;
+        }
+        setConfirmed(true);
+        setSelectedNumber(parseInt(enteredValue)); //convert text to the int
+        setEnteredValue('');
+    }
+
+    let confirmedOutput;
+
+    if(confirmed){
+    confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>
+    }
+
     return (
-        <View style={styles.screen}>
-            <Text style={styles.title}>Start a New Game</Text>
+        <TouchableWithoutFeedback onPress={() => {
+            // for close the keyboard by click around
+            Keyboard.dismiss();
+        }}>
+            <View style={styles.screen}>
+                <Text style={styles.title}>Start a New Game</Text>
 
-            <Card style={styles.inputContainer}>
-                <Text>Select a Number</Text>
-                <Input style={styles.input} />
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title='Reset' onPress={() => {}} color={Colors.accent}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title='Confirm' onPress={() => {}} color={Colors.primary}/>
-                    </View>
-                </View>
-            </Card>
+                <Card style={styles.inputContainer}>
+                    <Text>Select a Number</Text>
 
-        </View>
+                    <Input
+                        style={styles.input}
+                        blurOnSubmit autoCapitalize='none'
+                        autoCorrect={false}
+                        keyboardType='number-pad'
+                        maxLength={2}
+                        onChangeText={numberInputHandler}
+                        value={enteredValue}
+                    />
+
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.button}>
+                            <Button title='Reset' onPress={() => {resetInputHandler }} color={Colors.accent} />
+                        </View>
+                        <View style={styles.button}>
+                            <Button title='Confirm' onPress={() => {confirmInputHandler }} color={Colors.primary} />
+                        </View>
+                    </View>
+                </Card>
+
+                {confirmedOutput}
+
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -31,9 +88,9 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         padding: 10,
-        alignItems: 'center',       
+        alignItems: 'center',
     },
-    title:{
+    title: {
         fontSize: 20,
         marginVertical: 10,
     },
@@ -49,10 +106,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15
     },
     button: {
-        width:100,
+        width: 100,
     },
     input: {
-        width: 50
+        width: 50,
+        textAlign: 'center'
     }
 });
 

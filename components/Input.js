@@ -5,7 +5,7 @@ import Colors from '../constants/colors';
 
 const Input = props => {
     return (
-        <TextInput style={{...styles.input, ...props.style}} />
+        <TextInput {...props} style={{...styles.input, ...props.style}} />
     );
 };
 
