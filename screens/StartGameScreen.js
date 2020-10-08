@@ -12,6 +12,7 @@ import {
 import Colors from '../constants/colors';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import NumberContainer from '../components/NumberContainer';
 
 const StartGameScreen = props => {
 
@@ -21,12 +22,13 @@ const StartGameScreen = props => {
 
     const numberInputHandler = inputText => {
         // validate by only add numbers. otherwise empty 
-        setEnteredValue(inputText.replace(/[^0-9]/g, ''));
+        setEnteredValue(inputText.replace(/[^0-9]/,''));
     }
 
     const resetInputHandler = () => {
         setEnteredValue('');
         setConfirmed(false);
+        // console.log('Entered value: '+enteredValue);
     }
 
     const confirmInputHandler = () => {
@@ -38,12 +40,19 @@ const StartGameScreen = props => {
         setConfirmed(true);
         setSelectedNumber(parseInt(enteredValue)); //convert text to the int
         setEnteredValue('');
+        Keyboard.dismiss()
     }
 
     let confirmedOutput;
 
     if(confirmed){
-    confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>
+        confirmedOutput = (
+            <Card style={styles.summaryContainer}>
+                <Text>You selected</Text>
+                <NumberContainer>{selectedNumber}</NumberContainer>
+                <Button title='Start Game' />
+            </Card>
+        );
     }
 
     return (
@@ -69,10 +78,10 @@ const StartGameScreen = props => {
 
                     <View style={styles.buttonContainer}>
                         <View style={styles.button}>
-                            <Button title='Reset' onPress={() => {resetInputHandler }} color={Colors.accent} />
+                            <Button title='Reset' onPress={resetInputHandler } color={Colors.accent} />
                         </View>
                         <View style={styles.button}>
-                            <Button title='Confirm' onPress={() => {confirmInputHandler }} color={Colors.primary} />
+                            <Button title='Confirm' onPress={confirmInputHandler} color={Colors.primary} />
                         </View>
                     </View>
                 </Card>
@@ -111,6 +120,10 @@ const styles = StyleSheet.create({
     input: {
         width: 50,
         textAlign: 'center'
+    },
+    summaryContainer: {
+        marginTop:20,
+        alignItems: 'center',
     }
 });
 
