@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 // useRef is also like useState but if useRef value change it does not re-render
 import {View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
 
@@ -6,6 +6,8 @@ import {View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
 // import NumberComponent from '../components/NumberContainer';
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
+
+
 
 const genarateRandomBetween = (min,max,exclude) => {
     min = Math.ceil(min);
@@ -15,7 +17,7 @@ const genarateRandomBetween = (min,max,exclude) => {
     if(rndNum === exclude){
         return genarateRandomBetween(min,max,exclude);
     }else {
-        return rndNum;
+        return rndNum; 
     }
 }
 
@@ -24,10 +26,24 @@ const GameScreen = props => {
 
     const [currentGuess,setCurrentGuess] = useState(
         genarateRandomBetween(1,100,props.userChoice)
-        );
+    );
+
+    const [rounds, setRounds] = useState(0);
 
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
+
+    // this funtion useEffect execute after every cycle GameScreen executed
+    // GAME IS OVER
+    // pull the properties of props
+    // [] is to when execute use effect
+    const {userChoice, onGameOver} = props;
+
+    useEffect(() => {
+        if(currentGuess === props.userChoice){
+            onGameOver(rounds);
+        }
+    },[currentGuess, userChoice, onGameOver])
 
     const nextGuessHandler = direction => {
         if((direction === 'lower' && currentGuess < props.userChoice) || (direction === 'greater' && currentGuess > props.userChoice)  ){
@@ -41,6 +57,7 @@ const GameScreen = props => {
         }
         const nextNumber = genarateRandomBetween(currentLow.current,currentHigh.current,currentGuess);
         setCurrentGuess(nextNumber);
+        setRounds(currentRounds => currentRounds+1);
     }
 
     return (
