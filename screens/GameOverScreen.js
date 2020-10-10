@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, Button, Image} from 'react-native';
 import BodyText from '../components/BodyText';
 import TitleText from '../components/TitleText';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import MainBtton from '../components/MainButton';
 
 const GameOverScreen = props => {
     return(
@@ -28,10 +29,8 @@ const GameOverScreen = props => {
             </View>
 
             {/* <BodyText>Number was:{props.userNumber} </BodyText> */}
-            <Button 
-                title='NEW GAME' 
-                onPress= {props.onRestart}
-            />
+            
+            <MainBtton onPress= {props.onRestart}>NEW GAME </MainBtton>
         </View>
     )
 };

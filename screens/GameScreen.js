@@ -1,14 +1,14 @@
 import React, {useState, useRef, useEffect} from 'react';
 // useRef is also like useState but if useRef value change it does not re-render
 import {View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
 
 // import Colors from '../constants/colors';
 // import NumberComponent from '../components/NumberContainer';
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
-
-
+import MainBtton from '../components/MainButton';
 
 
 const genarateRandomBetween = (min,max,exclude) => {
@@ -68,8 +68,12 @@ const GameScreen = props => {
             <Text style={DefaultStyles.title}>Opponent's Guess</Text>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer}>
-                <Button title='LOWER' onPress={nextGuessHandler.bind(this,'lower')} />
-                <Button title='GRETER' onPress={nextGuessHandler.bind(this,'greater')} />
+                <MainBtton  onPress={nextGuessHandler.bind(this,'lower')} >
+                    <Ionicons name="md-remove" size={24} color="white" />LOWER 
+                </MainBtton>
+                <MainBtton  onPress={nextGuessHandler.bind(this,'greater')} >
+                    <Ionicons name="md-add" size={24} color="white" />GREATER 
+                </MainBtton>
             </Card>
         </View>
     );
@@ -85,8 +89,8 @@ const styles = StyleSheet.create({
        flexDirection: 'row',
        justifyContent: 'space-around',
        marginTop: 20,
-       width:300,
-       maxWidth:'80%',
+       width:400,
+       maxWidth:'90%',
    }
 });
 
