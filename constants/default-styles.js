@@ -1,4 +1,4 @@
-import {Stylesheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 // Gobaly manage styles
 export default StyleSheet.create({
