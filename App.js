@@ -26,7 +26,7 @@ export default function App() {
   const [dataLoaded,setDataLoaded] = useState(false);
 
   if(!dataLoaded){
-    return <AppLoadin
+    return <AppLoading />
   }
 
   const configureNewGameHandler = () => {
